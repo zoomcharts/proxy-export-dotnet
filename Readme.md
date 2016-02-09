@@ -9,6 +9,8 @@ to see if the application is installed correctly.
 
 For any support questions, please visit <https://forum.zoomcharts.com/>.
 
+**Note that this service supports only ZoomCharts 1.12.0 and newer versions.**
+
 # License
 
 This is free and unencumbered software released into the public domain.
