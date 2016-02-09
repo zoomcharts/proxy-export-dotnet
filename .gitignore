@@ -1,0 +1,11 @@
+﻿# letsencrypt folder
+/.well-known
+
+# Visual Studio temp files and folders
+/.vs
+/obj
+*.user
+
+# binary files not needed for running the app
+/bin/roslyn
+/bin/*.config

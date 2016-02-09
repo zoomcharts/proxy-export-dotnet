@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Proxy test page</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+    <form action="download" method="post" enctype="multipart/form-data">
+        <input name="name" type="text" value="export.png" />
+        <input name="data" id="data" type="text" value="" />
+        <input type="submit" value="Download" />
+    </form>
+
+    <script>
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        context.strokeStyle = "blue";
+        for (var i = 0; i < 100; i += 4) {
+            context.strokeRect(i, i, 300, 300);
+        }
+
+        document.getElementById("data").value = canvas.toDataURL("image/png");
+    </script>
+</body>
+</html>
