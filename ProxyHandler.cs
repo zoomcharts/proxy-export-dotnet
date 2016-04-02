@@ -19,17 +19,18 @@ namespace ZoomCharts.ProxyEcho
             // data:[<media type>][;charset=<character set>][;base64],<data>
             var data = context.Request["data"];
             
-            var i = data.IndexOf(',', 5);
-            var j = data.IndexOf(';', 5, i - 5);
-            if (j == -1) j = i;
+            var i = (data == null || !data.StartsWith("data:")) ? -1 : data.IndexOf(',', 5);
 
-            if (!data.StartsWith("data:") || i == -1)
+            if (i == -1)
             {
                 context.Response.StatusCode = 400;
                 context.Response.StatusDescription = "Bad request";
-                context.Response.Write("The request did not include a valid 'data' parameter.");
+                context.Response.Write("The request did not include a valid 'data' parameter which must be a valid data-uri.");
                 return;
             }
+            
+            var j = data.IndexOf(';', 5, i - 5);
+            if (j == -1) j = i;
 
             var type = data.Substring(5, j - 5);
 
