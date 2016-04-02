@@ -25,7 +25,9 @@ namespace ZoomCharts.ProxyEcho
             {
                 context.Response.StatusCode = 400;
                 context.Response.StatusDescription = "Bad request";
-                context.Response.Write("The request did not include a valid 'data' parameter which must be a valid data-uri.");
+                context.Response.Write("The request did not include a valid 'data' parameter which must be a valid data-uri.\r\n");
+                context.Response.Write("Received input:\r\n");
+                context.Response.Write(data ?? "<null>");
                 return;
             }
             
@@ -43,15 +45,27 @@ namespace ZoomCharts.ProxyEcho
 
             var base64 = i > 13 && data.Substring(i - 7, 7) == ";base64";
 
-            if (base64)
+            try
             {
-                var buffer = Convert.FromBase64String(data.Substring(i + 1));
-                context.Response.BinaryWrite(buffer);
+                if (base64)
+                {
+                    var buffer = Convert.FromBase64String(data.Substring(i + 1));
+                    context.Response.BinaryWrite(buffer);
+                }
+                else
+                {
+                    var decoded = Uri.UnescapeDataString(data.Substring(i + 1));
+                    context.Response.Write(decoded);
+                }
             }
-            else
+            catch(Exception ex)
             {
-                var decoded = Uri.UnescapeDataString(data.Substring(i + 1));
-                context.Response.Write(decoded);
+                context.Response.ClearHeaders();
+                context.Response.StatusCode = 400;
+                context.Response.StatusDescription = "Bad request";
+                context.Response.Write("The data-uri could not be parsed.\r\n");
+                context.Response.Write(ex.Message);
+                return;
             }
         }
     }
