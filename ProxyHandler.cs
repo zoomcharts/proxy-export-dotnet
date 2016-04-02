@@ -28,6 +28,7 @@ namespace ZoomCharts.ProxyEcho
                 context.Response.StatusCode = 400;
                 context.Response.StatusDescription = "Bad request";
                 context.Response.Write("The request did not include a valid 'data' parameter.");
+                return;
             }
 
             var type = data.Substring(5, j - 5);
